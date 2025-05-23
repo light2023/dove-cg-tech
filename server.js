@@ -2,7 +2,7 @@ require('dotenv').config(); // Load environment variables
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const connectDB = require('./db'); // Import the connection function
+const connectDB = require('./config/db'); // Import the connection function
 
 // Initialize Express app
 const app = express();
@@ -18,18 +18,18 @@ connectDB();
 
 // Basic route for testing
 app.get('/', (req, res) => {
-  res.send('E-Commerce API Running');
+  res.send('DOVE CG TECH API Running');
 });
 
 // Import routes
-const productRoutes = require('./routes/products');
-const userRoutes = require('./routes/users');
-const orderRoutes = require('./routes/orders');
+//const productRoutes = require('./routes/products');
+//const userRoutes = require('./routes/users');
+//const orderRoutes = require('./routes/orders');
 
 // Use routes
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/orders', orderRoutes);
+//app.use('/api/products', productRoutes);
+//app.use('/api/users', userRoutes);
+//app.use('/api/orders', orderRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
