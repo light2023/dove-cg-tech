@@ -1,0 +1,64 @@
+# === Global ===
+node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.pem
+
+# === Logs ===
+logs
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# === Operating System ===
+Thumbs.db
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# === Node ===
+node_modules/
+dist/
+build/
+.cache/
+.tmp/
+coverage/
+
+# === Environment Files ===
+.env*
+.env.*.local
+
+# === React ===
+/client/build/
+/client/.next/
+/client/.cache/
+
+# === Express / Node ===
+/server/node_modules/
+/server/dist/
+/server/tmp/
+/server/coverage/
+
+# === IDEs and Editors ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Test ===
+/coverage/
+/jest/
+
+# === Optional ===
+*.tgz
+*.gz
+*.zip
+
+# === MongoDB Dump ===
+dump/
