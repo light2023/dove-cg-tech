@@ -24,7 +24,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="body2">
-            &copy; {new Date().getFullYear()} DOVE CG Tech. All rights reserved.
+            © {new Date().getFullYear()} DOVE CG Tech. All rights reserved.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
             <Link

@@ -1,27 +1,29 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './styles/global.css';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '@mui/material/styles';
+import { AuthProvider } from './context/authContext';
+import store from './redux/store';
+import theme from './styles/theme';
+import AppRoutes from './routes';
 import Navbar from './components/ui/Navbar';
 import Footer from './components/ui/Footer';
-import Home from './pages/Home';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
+import './styles/global.css';
 
 function App() {
   return (
-    <Router>
-      <div className="app">
-        <Navbar />
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <AuthProvider>
+          <div className="app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Navbar />
+            <main style={{ flex: 1 }}>
+              <AppRoutes />
+            </main>
+            <Footer />
+          </div>
+        </AuthProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

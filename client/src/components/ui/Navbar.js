@@ -1,21 +1,26 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 
-const StyledAppBar = styled(AppBar)({
-  backgroundColor: 'var(--black-secondary)',
-  color: 'var(--green-primary)',
-});
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.primary.main,
+}));
 
-const NavButton = styled(Button)({
-  color: 'var(--text-light)',
+const NavButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.text.primary,
   '&:hover': {
-    color: 'var(--green-primary)',
+    color: theme.palette.primary.main,
     backgroundColor: 'rgba(0, 255, 127, 0.1)',
   },
-});
+}));
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <StyledAppBar position="static">
       <Toolbar>
@@ -23,22 +28,30 @@ const Navbar = () => {
           DOVE CG Tech
         </Typography>
         <Box>
-          <NavButton>Home</NavButton>
-          <NavButton>Courses</NavButton>
-          <NavButton>Company</NavButton>
-          <NavButton>Login</NavButton>
-          <NavButton 
-            variant="contained" 
-            sx={{ 
-              backgroundColor: 'var(--green-primary)', 
-              color: 'var(--black-primary)',
-              '&:hover': {
-                backgroundColor: 'var(--green-secondary)',
-              }
-            }}
-          >
-            Sign Up
-          </NavButton>
+          <NavButton onClick={() => navigate('/')}>Home</NavButton>
+          <NavButton onClick={() => navigate('/courses')}>Courses</NavButton>
+          <NavButton onClick={() => navigate('/company')}>Company</NavButton>
+          {user ? (
+            <>
+              <NavButton onClick={() => navigate('/dashboard')}>Dashboard</NavButton>
+              <NavButton onClick={() => { logout(); navigate('/'); }}>Logout</NavButton>
+            </>
+          ) : (
+            <>
+              <NavButton onClick={() => navigate('/login')}>Login</NavButton>
+              <NavButton
+                variant="contained"
+                onClick={() => navigate('/register')}
+                sx={{
+                  backgroundColor: 'var(--green-primary)',
+                  color: 'var(--black-primary)',
+                  '&:hover': { backgroundColor: 'var(--green-secondary)' },
+                }}
+              >
+                Sign Up
+              </NavButton>
+            </>
+          )}
         </Box>
       </Toolbar>
     </StyledAppBar>

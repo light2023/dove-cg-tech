@@ -1,0 +1,12 @@
+export const COLORS = {
+  BLACK_PRIMARY: '#121212',
+  BLACK_SECONDARY: '#1A1A1A',
+  GREEN_PRIMARY: '#00FF7F',
+  GREEN_SECONDARY: '#2ECC71',
+  YELLOW_PRIMARY: '#FFD700',
+  YELLOW_SECONDARY: '#F1C40F',
+  TEXT_LIGHT: '#E0E0E0',
+  TEXT_MUTED: '#AAAAAA',
+};
+
+export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';

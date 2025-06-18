@@ -1,6 +1,9 @@
-import React from 'react';
-import { Box, Typography, TextField, Button, Container } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button, Container, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../hooks/useAuth';
+import { register } from '../../../api/auth';
 
 const RegisterContainer = styled(Box)({
   minHeight: '80vh',
@@ -10,20 +13,42 @@ const RegisterContainer = styled(Box)({
   padding: '20px',
 });
 
-const RegisterForm = styled(Box)({
-  backgroundColor: 'var(--black-secondary)',
+const RegisterForm = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
   padding: '40px',
   borderRadius: '8px',
-  boxShadow: '0 0 10px var(--green-primary)',
+  boxShadow: `0 0 10px ${theme.palette.primary.main}`,
   width: '100%',
   maxWidth: '400px',
-});
+}));
 
 const Register = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login: authLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const data = await register(name, email, password);
+      authLogin(email, data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <RegisterContainer>
       <Container maxWidth="sm">
-        <RegisterForm component="form">
+        <RegisterForm component="form" onSubmit={handleSubmit}>
           <Typography
             variant="h4"
             component="h1"
@@ -32,33 +57,28 @@ const Register = () => {
           >
             Register
           </Typography>
+          {error && (
+            <Typography color="error" sx={{ mb: 2, textAlign: 'center' }}>
+              {error}
+            </Typography>
+          )}
           <TextField
             label="Full Name"
             variant="outlined"
             fullWidth
             margin="normal"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                color: 'var(--text-light)',
-                '& fieldset': { borderColor: 'var(--text-muted)' },
-                '&:hover fieldset': { borderColor: 'var(--green-primary)' },
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-            }}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            sx={{ '& .MuiInputLabel-root': { color: 'var(--text-muted)' } }}
           />
           <TextField
             label="Email"
             variant="outlined"
             fullWidth
             margin="normal"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                color: 'var(--text-light)',
-                '& fieldset': { borderColor: 'var(--text-muted)' },
-                '&:hover fieldset': { borderColor: 'var(--green-primary)' },
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-            }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{ '& .MuiInputLabel-root': { color: 'var(--text-muted)' } }}
           />
           <TextField
             label="Password"
@@ -66,30 +86,24 @@ const Register = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                color: 'var(--text-light)',
-                '& fieldset': { borderColor: 'var(--text-muted)' },
-                '&:hover fieldset': { borderColor: 'var(--green-primary)' },
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-            }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ '& .MuiInputLabel-root': { color: 'var(--text-muted)' } }}
           />
           <Button
             variant="contained"
             fullWidth
+            type="submit"
+            disabled={loading}
             sx={{
-              backgroundColor: 'var(--green-primary)',
+              mt: 2,
+              py: 1.5,
+              bgcolor: 'var(--green-primary)',
               color: 'var(--black-primary)',
-              marginTop: '20px',
-              padding: '12px',
-              '&:hover': {
-                backgroundColor: 'var(--green-secondary)',
-                boxShadow: '0 0 10px var(--yellow-primary)',
-              },
+              '&:hover': { bgcolor: 'var(--green-secondary)' },
             }}
           >
-            Sign Up
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign Up'}
           </Button>
         </RegisterForm>
       </Container>

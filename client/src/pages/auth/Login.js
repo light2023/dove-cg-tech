@@ -1,6 +1,9 @@
-import React from 'react';
-import { Box, Typography, TextField, Button, Container } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, TextField, Button, Container, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../hooks/useAuth';
+import { login } from '../../../api/auth';
 
 const LoginContainer = styled(Box)({
   minHeight: '80vh',
@@ -10,20 +13,41 @@ const LoginContainer = styled(Box)({
   padding: '20px',
 });
 
-const LoginForm = styled(Box)({
-  backgroundColor: 'var(--black-secondary)',
+const LoginForm = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
   padding: '40px',
   borderRadius: '8px',
-  boxShadow: '0 0 10px var(--green-primary)',
+  boxShadow: `0 0 10px ${theme.palette.primary.main}`,
   width: '100%',
   maxWidth: '400px',
-});
+}));
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const { login: authLogin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const data = await login(email, password);
+      authLogin(email, data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <LoginContainer>
       <Container maxWidth="sm">
-        <LoginForm component="form">
+        <LoginForm component="form" onSubmit={handleSubmit}>
           <Typography
             variant="h4"
             component="h1"
@@ -32,19 +56,19 @@ const Login = () => {
           >
             Login
           </Typography>
+          {error && (
+            <Typography color="error" sx={{ mb: 2, textAlign: 'center' }}>
+              {error}
+            </Typography>
+          )}
           <TextField
             label="Email"
             variant="outlined"
             fullWidth
             margin="normal"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                color: 'var(--text-light)',
-                '& fieldset': { borderColor: 'var(--text-muted)' },
-                '&:hover fieldset': { borderColor: 'var(--green-primary)' },
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-            }}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{ '& .MuiInputLabel-root': { color: 'var(--text-muted)' } }}
           />
           <TextField
             label="Password"
@@ -52,30 +76,24 @@ const Login = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                color: 'var(--text-light)',
-                '& fieldset': { borderColor: 'var(--text-muted)' },
-                '&:hover fieldset': { borderColor: 'var(--green-primary)' },
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-muted)' },
-            }}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ '& .MuiInputLabel-root': { color: 'var(--text-muted)' } }}
           />
           <Button
             variant="contained"
             fullWidth
+            type="submit"
+            disabled={loading}
             sx={{
-              backgroundColor: 'var(--green-primary)',
+              mt: 2,
+              py: 1.5,
+              bgcolor: 'var(--green-primary)',
               color: 'var(--black-primary)',
-              marginTop: '20px',
-              padding: '12px',
-              '&:hover': {
-                backgroundColor: 'var(--green-secondary)',
-                boxShadow: '0 0 10px var(--yellow-primary)',
-              },
+              '&:hover': { bgcolor: 'var(--green-secondary)' },
             }}
           >
-            Sign In
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Sign In'}
           </Button>
         </LoginForm>
       </Container>
