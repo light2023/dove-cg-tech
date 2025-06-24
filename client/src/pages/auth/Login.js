@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, Container, CircularProgress } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../hooks/useAuth';
-import { login } from '../../../api/auth';
+import { useAuth } from '../../hooks/useAuth';
+import { login } from '../../api/auth';
 
 const LoginContainer = styled(Box)({
   minHeight: '80vh',
