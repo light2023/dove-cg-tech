@@ -19,7 +19,7 @@ const Home = () => {
     <HeroSection>
       <Container maxWidth="md">
         <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'var(--green-primary)' }}>
-          Mirror your World with DOVE CG Tech
+          Transform your Workforce with DOVE CG Tech
         </Typography>
         <Typography variant="h5" component="p" gutterBottom sx={{ mb: 4 }}>
           Cutting-edge eLearning solutions for corporate excellence
